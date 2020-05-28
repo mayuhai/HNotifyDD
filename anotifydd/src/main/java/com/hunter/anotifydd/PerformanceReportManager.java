@@ -60,7 +60,7 @@ public class PerformanceReportManager {
             jsonObject.put("msgtype", "text");
 
             JSONObject jsonObjectContent = new JSONObject();
-            jsonObjectContent.put("content", Tag + Utils.deviceInfo(context) + Utils.formatTraceLogMsg(activity, content, null));
+            jsonObjectContent.put("content", ddRobotTag + Utils.deviceInfo(context) + Utils.formatTraceLogMsg(activity, content, null));
             jsonObject.put("text", jsonObjectContent.toString());
 
             body = jsonObject.toString();
