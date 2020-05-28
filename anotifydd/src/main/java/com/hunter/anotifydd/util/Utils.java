@@ -1,5 +1,6 @@
 package com.hunter.anotifydd.util;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -8,7 +9,12 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 
+import com.hunter.anotifydd.PerformanceReportManager;
+
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -18,6 +24,8 @@ import static android.text.TextUtils.isEmpty;
  * created on: 2019-06-21 14:03
  */
 public class Utils {
+
+    public final static SimpleDateFormat yyyy_MM_dd_HH_mm_ss_SS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SS", Locale.getDefault());
     /**
      * SDCard是否有剩余空间
      */
@@ -104,6 +112,39 @@ public class Utils {
         sb.append("DEVICE: ").append(Build.DEVICE).append('\n');
         sb.append("VERSION: ").append(Build.VERSION.RELEASE).append('\n');
         sb.append("HARDWARE: ").append(Build.HARDWARE).append('\n');
+        return sb.toString();
+    }
+
+    /**
+     *
+     * @param currentActivity
+     * @param content
+     * @param userInfo
+     * @return
+     */
+    public static String formatTraceLogMsg(Activity currentActivity, String content, String userInfo) {
+        String timeStr = yyyy_MM_dd_HH_mm_ss_SS.format(Calendar.getInstance().getTime());
+        String currentActivityName = null;
+        String netWork = null;
+        if (currentActivity != null) {
+            currentActivityName = currentActivity.getClass().getName();
+            netWork = NetUtil.getNetWorkStr(currentActivity);
+        } else {
+            currentActivityName = Utils.getRunningActivityName(PerformanceReportManager.getInstance().getContext());
+            netWork = NetUtil.getNetWorkStr(PerformanceReportManager.getInstance().getContext());
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Activity: ")
+                .append(currentActivityName)
+                .append("| Network: ")
+                .append(netWork)
+                .append("| Time: ")
+                .append(timeStr)
+                .append("| user: ")
+                .append(userInfo)
+                .append(" >> ")
+                .append(content);
         return sb.toString();
     }
 }

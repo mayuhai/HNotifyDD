@@ -1,5 +1,6 @@
 package com.hunter.anotifydd;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.hunter.anotifydd.net.TCHttpURLClient;
@@ -48,18 +49,18 @@ public class PerformanceReportManager {
 
     /**
      *
-     * @param Tag               创建机器人时选择匹配标签
-     * @param exceptionStr      内容
+     * @param ddRobotTag               创建机器人时选择匹配标签
+     * @param content      内容
      * @param reportDDRobotUrl  推送钉钉的webhook地址
      */
-    public void notifyToDD(String Tag, String exceptionStr, String reportDDRobotUrl) {
+    public void notifyToDD(String ddRobotTag, String content, String reportDDRobotUrl, Activity activity) {
         String body = "";
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("msgtype", "text");
 
             JSONObject jsonObjectContent = new JSONObject();
-            jsonObjectContent.put("content", Tag + Utils.deviceInfo(context) + exceptionStr);
+            jsonObjectContent.put("content", Tag + Utils.deviceInfo(context) + Utils.formatTraceLogMsg(activity, content, null));
             jsonObject.put("text", jsonObjectContent.toString());
 
             body = jsonObject.toString();
