@@ -1,0 +1,3 @@
+rootProject.name='HNotityDD'
+include ':app'
+include ':anotifydd'
